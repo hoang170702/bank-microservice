@@ -1,7 +1,9 @@
 package com.microservices.loans.service;
 
 import com.microservices.loans.dto.LoansDto;
+import org.springframework.stereotype.Service;
 
+@Service
 public class LoansServices implements ILoansService {
     @Override
     public void createLoan(String mobileNumber) {
