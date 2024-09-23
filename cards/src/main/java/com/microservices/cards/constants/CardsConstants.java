@@ -1,4 +1,4 @@
-package com.microservices.cards.constain;
+package com.microservices.cards.constants;
 
 public class CardsConstants {
     private CardsConstants() {
