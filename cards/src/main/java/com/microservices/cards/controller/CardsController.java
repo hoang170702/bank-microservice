@@ -39,4 +39,14 @@ public class CardsController {
                         updated ? CardsConstants.MESSAGE_200 : CardsConstants.MESSAGE_417_UPDATE)
                 );
     }
+
+    @PostMapping("/delete-card")
+    public ResponseEntity<ResponseDto> deleteCard(@RequestParam String mobilePhone) {
+        boolean deleted = iCardsService.deleteCard(mobilePhone);
+        return ResponseEntity.status(deleted ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseDto(
+                        deleted ? CardsConstants.STATUS_200 : CardsConstants.STATUS_417,
+                        deleted ? CardsConstants.MESSAGE_200 : CardsConstants.MESSAGE_417_DELETE)
+                );
+    }
 }

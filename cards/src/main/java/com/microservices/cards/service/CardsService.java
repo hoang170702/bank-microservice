@@ -7,6 +7,7 @@ import com.microservices.cards.exception.CardAlreadyExistsException;
 import com.microservices.cards.exception.ResourceNotFoundException;
 import com.microservices.cards.mapper.CardMapper;
 import com.microservices.cards.repository.CardRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ public class CardsService implements ICardsService {
         this.cardRepository = cardRepository;
     }
 
+    @Transactional
     @Override
     public void createCard(String mobileNumber) {
         Optional<Cards> existsCard = cardRepository.findByMobileNumber(mobileNumber);
@@ -53,12 +55,14 @@ public class CardsService implements ICardsService {
         return card.map(cards -> CardMapper.mapToCardsDto(cards, new CardsDto())).orElseThrow(() -> new ResourceNotFoundException("Card", "Phone number", mobileNumber));
     }
 
+    @Transactional
     @Override
     public boolean updateCard(CardsDto cardsDto) {
         boolean isUpdate = false;
-        Optional<Cards> card = cardRepository.findByMobileNumber(cardsDto.getMobileNumber());
-        if (card.isPresent()) {
-            Cards cardUpdate = CardMapper.mapToCards(cardsDto, card.get());
+        Cards card = cardRepository.findByMobileNumber(cardsDto.getMobileNumber())
+                .orElseThrow(() -> new ResourceNotFoundException("Card", "Phone number", cardsDto.getMobileNumber()));
+        if (card != null) {
+            Cards cardUpdate = CardMapper.mapToCards(cardsDto, card);
             cardUpdate.setUpdatedAt(LocalDateTime.now());
             cardRepository.save(cardUpdate);
             isUpdate = true;
@@ -66,8 +70,15 @@ public class CardsService implements ICardsService {
         return isUpdate;
     }
 
+    @Transactional
     @Override
     public boolean deleteCard(String mobileNumber) {
-        return false;
+        boolean isDelete = false;
+        Cards card = cardRepository.findByMobileNumber(mobileNumber).orElseThrow(() -> new ResourceNotFoundException("Card", "Phone number", mobileNumber));
+        if (card != null) {
+            cardRepository.deleteByMobileNumber(mobileNumber);
+            isDelete = true;
+        }
+        return isDelete;
     }
 }
