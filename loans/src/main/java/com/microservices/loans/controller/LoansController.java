@@ -28,5 +28,21 @@ public class LoansController {
         return ResponseEntity.status(HttpStatus.OK).body(iLoansService.fetchLoan(mobileNumber));
     }
 
+    @PostMapping("/update-loan")
+    public ResponseEntity<ResponseDto> updateLoan(@RequestBody LoansDto loansDto) {
+        boolean isUpdate = iLoansService.updateLoan(loansDto);
+        return ResponseEntity.status(isUpdate ? HttpStatus.OK : HttpStatus.NOT_FOUND)
+                .body(new ResponseDto(
+                        isUpdate ? LoansConstants.STATUS_200 : LoansConstants.STATUS_417,
+                        isUpdate ? LoansConstants.MESSAGE_200 : LoansConstants.MESSAGE_417_UPDATE));
+    }
 
+    @PostMapping("/delete-loan")
+    public ResponseEntity<ResponseDto> deleteLoan(@RequestParam String mobileNumber) {
+        boolean isDelete = iLoansService.deleteLoan(mobileNumber);
+        return ResponseEntity.status(isDelete ? HttpStatus.OK : HttpStatus.NOT_FOUND)
+                .body(new ResponseDto(
+                        isDelete ? LoansConstants.STATUS_200 : LoansConstants.STATUS_417,
+                        isDelete ? LoansConstants.MESSAGE_200 : LoansConstants.MESSAGE_417_DELETE));
+    }
 }

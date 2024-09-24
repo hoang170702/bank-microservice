@@ -7,6 +7,7 @@ import com.microservices.loans.exception.LoanAlreadyExistsException;
 import com.microservices.loans.exception.ResourceNotFoundException;
 import com.microservices.loans.mapper.LoansMapper;
 import com.microservices.loans.repository.LoansRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ public class LoansServices implements ILoansService {
         this.loansRepository = loansRepository;
     }
 
+    @Transactional
     @Override
     public void createLoan(String mobileNumber) {
         // Implement logic to create a loan
@@ -56,6 +58,7 @@ public class LoansServices implements ILoansService {
                 .orElseThrow(() -> new ResourceNotFoundException("Loan", "phone number", mobileNumber));
     }
 
+    @Transactional
     @Override
     public boolean updateLoan(LoansDto loansDto) {
         boolean isUpdate = false;
@@ -70,8 +73,16 @@ public class LoansServices implements ILoansService {
         return isUpdate;
     }
 
+    @Transactional
     @Override
     public boolean deleteLoan(String mobileNumber) {
-        return false;
+        boolean isDelete = false;
+        Loans loan = loansRepository.findByMobileNumber(mobileNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("Loan", "phone number", mobileNumber));
+        if (loan != null) {
+            loansRepository.deleteByMobileNumber(mobileNumber);
+            isDelete = true;
+        }
+        return isDelete;
     }
 }
