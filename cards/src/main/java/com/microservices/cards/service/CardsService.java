@@ -20,8 +20,10 @@ public class CardsService implements ICardsService {
 
     @Override
     public void createCard(String mobileNumber) {
-        cardRepository.findByMobileNumber(mobileNumber)
-                .orElseThrow(() -> new CardAlreadyExistsException("phone number already exists" + mobileNumber));
+        Optional<Cards> existsCard = cardRepository.findByMobileNumber(mobileNumber);
+        if (existsCard.isPresent()) {
+            throw new CardAlreadyExistsException("phone number already exists: " + mobileNumber);
+        }
         cardRepository.save(createNewCard(mobileNumber));
     }
 
