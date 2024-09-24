@@ -4,10 +4,13 @@ import com.microservices.loans.constants.LoansConstants;
 import com.microservices.loans.dto.LoansDto;
 import com.microservices.loans.entity.Loans;
 import com.microservices.loans.exception.LoanAlreadyExistsException;
+import com.microservices.loans.exception.ResourceNotFoundException;
+import com.microservices.loans.mapper.LoansMapper;
 import com.microservices.loans.repository.LoansRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
 
@@ -48,12 +51,23 @@ public class LoansServices implements ILoansService {
 
     @Override
     public LoansDto fetchLoan(String mobileNumber) {
-        return null;
+        Optional<Loans> loan = loansRepository.findByMobileNumber(mobileNumber);
+        return loan.map(loans -> LoansMapper.mapToLoansDto(loans, new LoansDto()))
+                .orElseThrow(() -> new ResourceNotFoundException("Loan", "phone number", mobileNumber));
     }
 
     @Override
     public boolean updateLoan(LoansDto loansDto) {
-        return false;
+        boolean isUpdate = false;
+        Loans loan = loansRepository.findByMobileNumber(loansDto.getMobileNumber())
+                .orElseThrow(() -> new ResourceNotFoundException("Loan", "phone number", loansDto.getMobileNumber()));
+        if (loan != null) {
+            Loans updateLoan = LoansMapper.mapToLoans(loansDto, loan);
+            updateLoan.setUpdatedAt(LocalDateTime.now());
+            loansRepository.save(updateLoan);
+            isUpdate = true;
+        }
+        return isUpdate;
     }
 
     @Override
