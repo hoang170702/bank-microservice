@@ -30,6 +30,13 @@ public class CardsController {
         return ResponseEntity.status(HttpStatus.OK).body(iCardsService.fetchCard(mobilePhone));
     }
 
-
-
+    @PostMapping("/update-card")
+    public ResponseEntity<ResponseDto> updateCard(@RequestBody CardsDto cardsDto) {
+        boolean updated = iCardsService.updateCard(cardsDto);
+        return ResponseEntity.status(updated ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseDto(
+                        updated ? CardsConstants.STATUS_200 : CardsConstants.STATUS_417,
+                        updated ? CardsConstants.MESSAGE_200 : CardsConstants.MESSAGE_417_UPDATE)
+                );
+    }
 }

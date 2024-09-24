@@ -9,6 +9,7 @@ import com.microservices.cards.mapper.CardMapper;
 import com.microservices.cards.repository.CardRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
 
@@ -49,13 +50,20 @@ public class CardsService implements ICardsService {
     @Override
     public CardsDto fetchCard(String mobileNumber) {
         Optional<Cards> card = cardRepository.findByMobileNumber(mobileNumber);
-        return card.map(cards -> CardMapper.mapToCardsDto(cards, new CardsDto()))
-                .orElseThrow(() -> new ResourceNotFoundException("Card", "Phone number", mobileNumber));
+        return card.map(cards -> CardMapper.mapToCardsDto(cards, new CardsDto())).orElseThrow(() -> new ResourceNotFoundException("Card", "Phone number", mobileNumber));
     }
 
     @Override
     public boolean updateCard(CardsDto cardsDto) {
-        return false;
+        boolean isUpdate = false;
+        Optional<Cards> card = cardRepository.findByMobileNumber(cardsDto.getMobileNumber());
+        if (card.isPresent()) {
+            Cards cardUpdate = CardMapper.mapToCards(cardsDto, card.get());
+            cardUpdate.setUpdatedAt(LocalDateTime.now());
+            cardRepository.save(cardUpdate);
+            isUpdate = true;
+        }
+        return isUpdate;
     }
 
     @Override
