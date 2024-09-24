@@ -4,6 +4,8 @@ import com.microservices.cards.constants.CardsConstants;
 import com.microservices.cards.dto.CardsDto;
 import com.microservices.cards.entity.Cards;
 import com.microservices.cards.exception.CardAlreadyExistsException;
+import com.microservices.cards.exception.ResourceNotFoundException;
+import com.microservices.cards.mapper.CardMapper;
 import com.microservices.cards.repository.CardRepository;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +48,9 @@ public class CardsService implements ICardsService {
 
     @Override
     public CardsDto fetchCard(String mobileNumber) {
-        return null;
+        Optional<Cards> card = cardRepository.findByMobileNumber(mobileNumber);
+        return card.map(cards -> CardMapper.mapToCardsDto(cards, new CardsDto()))
+                .orElseThrow(() -> new ResourceNotFoundException("Card", "Phone number", mobileNumber));
     }
 
     @Override
