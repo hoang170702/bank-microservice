@@ -1,26 +1,42 @@
 package com.microservices.accounts.entity;
 
-import com.microservices.accounts.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "ACCOUNTS")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "accounts")
-public class Accounts extends BaseEntity {
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
+@AllArgsConstructor
+@ToString
+public class Accounts {
 
     @Id
-    @Column(name = "account_number")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "accounts_seq")
+    @SequenceGenerator(name = "accounts_seq", sequenceName = "ACCOUNTS_SEQ", allocationSize = 1)
     private Long accountNumber;
 
-    @Column(name = "account_type", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CUSTOMER_ID", nullable = false)
+    private Customer customer;
+
+    @Column(name = "ACCOUNT_TYPE", nullable = false)
     private String accountType;
 
-    @Column(name = "branch_address")
+    @Column(name = "BRANCH_ADDRESS")
     private String branchAddress;
+
+    @Column(name = "CREATED_AT", updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(name = "CREATED_BY")
+    private String createdBy;
+
+    @Column(name = "UPDATED_AT", insertable = false)
+    private LocalDateTime updatedAt;
+
+    @Column(name = "UPDATED_BY")
+    private String updatedBy;
 }

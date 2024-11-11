@@ -2,16 +2,14 @@ spring:
   application:
    name: accounts
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:8080/dev
-    username: admin
-    password: admin
+    url: jdbc:oracle:thin:@localhost:1521:orcl
+    username: hr
+    password: hr
+    driver-class-name: oracle.jdbc.OracleDriver
   jpa:
-    database: postgresql
+    database: oracle
     hibernate:
       ddl-auto: none
     show-sql: true
-  main:
-    allow-circular-references: true
 server:
  port: 8088
