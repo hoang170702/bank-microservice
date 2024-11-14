@@ -1,26 +1,44 @@
 package com.microservices.accounts.controller;
 
 import com.microservices.accounts.constants.AccountConstants;
+import com.microservices.accounts.dto.AccountsContactInfoDto;
 import com.microservices.accounts.dto.CustomerDto;
 import com.microservices.accounts.dto.payload.ResponseDto;
 import com.microservices.accounts.service.accounts.IAccountService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(
+        name = "CRUD REST APIs for Accounts in EazyBank",
+        description = "CRUD REST APIs in EazyBank to CREATE, UPDATE, FETCH AND DELETE account details"
+)
 @RestController
-@RequestMapping(value = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path="/api", produces = {MediaType.APPLICATION_JSON_VALUE})
+@Validated
 public class AccountsController {
 
     private final IAccountService iAccountService;
 
-    @Autowired
     public AccountsController(IAccountService iAccountService) {
         this.iAccountService = iAccountService;
     }
+
+    @Value("${build.version}")
+    private String buildVersion;
+
+    @Autowired
+    private Environment environment;
+
+    @Autowired
+    private AccountsContactInfoDto accountsContactInfoDto;
 
     @PostMapping("/create-account")
     public ResponseEntity<ResponseDto> createAccount(@Valid @RequestBody CustomerDto customerDto) {
@@ -59,5 +77,27 @@ public class AccountsController {
                                 isDelete ? AccountConstants.STATUS_200 : AccountConstants.STATUS_500,
                                 isDelete ? AccountConstants.MESSAGE_200 : AccountConstants.MESSAGE_500)
                 );
+    }
+
+    @GetMapping("/build-info")
+    public ResponseEntity<String> getBuildInfo() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(buildVersion);
+    }
+
+
+    @GetMapping("/java-version")
+    public ResponseEntity<String> getJavaVersion() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(environment.getProperty("JAVA_HOME"));
+    }
+
+    @GetMapping("/contact-info")
+    public ResponseEntity<AccountsContactInfoDto> getContactInfo() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(accountsContactInfoDto);
     }
 }

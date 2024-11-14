@@ -1,0 +1,15 @@
+spring:
+  config:
+    activate:
+      on-profile: "prod"
+build:
+  version: "1.0"
+
+accounts:
+  message: "Welcome to my bank Account prod"
+  contactDetails:
+    email: "huyhoang11202@gmail.com"
+    name: "NGUYEN HUY HOANG - PRODUCT Owner"
+  onCallSupport:
+    - (999) 999-1234
+    - (999) 999-1345
