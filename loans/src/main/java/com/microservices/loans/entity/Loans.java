@@ -14,8 +14,7 @@ import java.time.LocalDateTime;
 public class Loans {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "loans_seq")
-    @SequenceGenerator(name = "loans_seq", sequenceName = "LOANS_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "MOBILE_NUMBER", length = 20)

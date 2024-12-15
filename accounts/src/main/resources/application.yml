@@ -2,15 +2,19 @@ spring:
   application:
     name: accounts
   datasource:
-    url: jdbc:oracle:thin:@localhost:1521:orcl
-    username: hr
-    password: hr
-    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:mysql://localhost:3306/test
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    database: oracle
+    database: mysql
     hibernate:
       ddl-auto: none
     show-sql: true
+    properties:
+      hibernate:
+        boot:
+          allow_jdbc_metadata_access: false
   config:
     import:
       - "application_qa.yml"
@@ -20,7 +24,7 @@ spring:
     active: dev
 
 server:
-  port: 8088
+  port: 9088
 
 logging:
   level:

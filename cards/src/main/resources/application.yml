@@ -2,17 +2,17 @@ spring:
   application:
     name: cards
   datasource:
-    url: jdbc:oracle:thin:@localhost:1521:orcl
-    username: hr
-    password: hr
-    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:mysql://localhost:3306/test
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: oracle
     hibernate:
       ddl-auto: none
     show-sql: true
 server:
-  port: 8089
+  port: 9089
 
 springdoc:
   api-docs:

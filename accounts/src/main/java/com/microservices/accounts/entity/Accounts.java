@@ -5,7 +5,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "ACCOUNTS")
+@Table(name = "accounts")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,8 +14,7 @@ import java.time.LocalDateTime;
 public class Accounts {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "accounts_seq")
-    @SequenceGenerator(name = "accounts_seq", sequenceName = "ACCOUNTS_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long accountNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
