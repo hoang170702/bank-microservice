@@ -2,15 +2,19 @@ spring:
   application:
     name: cards
   datasource:
-    url: jdbc:mysql://localhost:3306/test
-    username: root
+    url: jdbc:h2:mem:testdb
+    username: sa
     password:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.h2.Driver
   jpa:
-    database: oracle
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     show-sql: true
+    properties:
+      hibernate:
+        boot:
+          allow_jdbc_metadata_access: false
 server:
   port: 9089
 
