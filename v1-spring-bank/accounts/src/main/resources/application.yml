@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: accounts
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        boot:
+          allow_jdbc_metadata_access: false
+  config:
+    import:
+      - "application_qa.yml"
+      - "application_prod.yml"
+      - "application_dev.yml"
+  profiles:
+    active: dev
+
+server:
+  port: 9088
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html

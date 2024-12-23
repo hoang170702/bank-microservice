@@ -1,0 +1,16 @@
+spring:
+  config:
+    activate:
+      on-profile: "dev"
+
+build:
+  version: "3.0"
+
+accounts:
+  message: "Welcome to my bank CARDS development"
+  contactDetails:
+    email: "dev@gmail.com"
+    name: "NGUYEN HUY HOANG - DEVELOPMENT"
+  onCallSupport:
+    - (888) 888-1234
+    - (888) 888-1345
