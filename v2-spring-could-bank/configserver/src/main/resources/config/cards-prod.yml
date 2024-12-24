@@ -1,12 +1,8 @@
-spring:
-  config:
-    activate:
-      on-profile: "prod"
 build:
   version: "1.0"
 
-accounts:
-  message: "Welcome to my bank Account prod"
+cards:
+  message: "Welcome to my bank Cards prod"
   contactDetails:
     email: "huyhoang11202@gmail.com"
     name: "NGUYEN HUY HOANG - PRODUCT Owner"
