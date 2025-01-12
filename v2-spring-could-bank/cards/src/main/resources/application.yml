@@ -22,6 +22,12 @@ spring:
 server:
   port: 9089
 
+#get all api of ACTUATOR
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 springdoc:
   api-docs:
     path: /v3/api-docs

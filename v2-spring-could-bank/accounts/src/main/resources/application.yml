@@ -27,6 +27,12 @@ logging:
     root: INFO
     org.springframework.web: DEBUG
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
 springdoc:
   api-docs:
     path: /v3/api-docs

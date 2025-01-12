@@ -2,11 +2,28 @@ spring:
   application:
     name: "configserver"
   profiles:
-    active: native
+#    ------------- config by github repository ------------------
+    active: git
   cloud:
     config:
       server:
-        native:
-          search-locations: "classpath:/config"
+        git:
+          uri: "https://github.com/hoang170702/microservice-bank-config.git"
+          default-label: main
+          timeout: 5
+          clone-on-start: true
+          force-pull: true
+
+
+# ------------ config by file local and server ------------
+#    active: native
+#  cloud:
+#    config:
+#      server:
+#        native:
+#          search-locations: "file:///D://bank_microservice//document//config"
+##          search-locations: "classpath:/config"
+encrypt:
+  key: "78FDSUHFU213J3H4IU234U123KHFEHF894RI"
 server:
   port: 8071
