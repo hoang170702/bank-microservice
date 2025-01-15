@@ -14,7 +14,19 @@ spring:
           clone-on-start: true
           force-pull: true
 
+  #config rabbitmq
+  rabbitmq:
+    host: "localhost"
+    port: 5672
+    username: "guest"
+    password: "guest"
 
+#accept all api actuators
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 # ------------ config by file local and server ------------
 #    active: native
 #  cloud:
@@ -27,3 +39,5 @@ encrypt:
   key: "78FDSUHFU213J3H4IU234U123KHFEHF894RI"
 server:
   port: 8071
+
+

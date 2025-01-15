@@ -17,6 +17,12 @@ spring:
       hibernate:
         boot:
           allow_jdbc_metadata_access: false
+  #config rabbitmq
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
   config:
     import: "optional:configserver:http://localhost:8071/"
 server:

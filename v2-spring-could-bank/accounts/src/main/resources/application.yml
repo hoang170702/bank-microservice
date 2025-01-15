@@ -19,6 +19,16 @@ spring:
           allow_jdbc_metadata_access: false
   config:
     import: "optional:configserver:http://localhost:8071/"
+
+  #config rabbitmq
+  rabbitmq:
+    host: "localhost"
+    port: 5672
+    username: "guest"
+    password: "guest"
+
+
+
 server:
   port: 9088
 
@@ -27,11 +37,18 @@ logging:
     root: INFO
     org.springframework.web: DEBUG
 
+#accept all api actuators
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+
+
+
+
+
+
 
 springdoc:
   api-docs:
