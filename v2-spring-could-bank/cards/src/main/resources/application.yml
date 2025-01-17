@@ -1,6 +1,6 @@
 spring:
   application:
-    name: cards
+    name: "cards"
   profiles:
     active: "dev"
   datasource:

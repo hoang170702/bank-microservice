@@ -1,0 +1,27 @@
+services:
+
+  # Kết nối container vào mạng "microservices_network".
+  network-deploy-service:
+    networks:
+      - microservices_network
+
+  # Kế thừa container mạng của network-deploy-service và Giới hạn bộ nhớ cho container là 700MB.
+  microservice-base-config:
+    extends:
+      service: network-deploy-service
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+  # Kế thừa microservice-base-config và cấu hình môi trường cho ứng dụng Spring.
+  microservice-configserver-config:
+    extends:
+      service: microservice-base-config
+    # Dịch vụ này phụ thuộc vào "configserver" và chỉ khởi động khi "configserver" hoàn thành thành công.
+    depends_on:
+      configserver:
+        condition: service_completed_successfully
+    environment:
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
+      SPRING_PROFILES_ACTIVE: dev
