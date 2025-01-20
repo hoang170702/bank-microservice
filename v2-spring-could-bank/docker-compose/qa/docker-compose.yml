@@ -1,0 +1,89 @@
+services:
+  rabbit:
+    image: rabbitmq:4.0-management
+    hostname: rabbitmq
+    # Mở cổng 5672 để RabbitMQ xử lý giao tiếp với các dịch vụ khác.
+    # Mở cổng 15672 để truy cập giao diện quản lý RabbitMQ.
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    # Kiểm tra sức khỏe container bằng lệnh chẩn đoán của RabbitMQ.
+    healthcheck:
+      test: rabbitmq-diagnostic check_port_connectivity
+      # Thực hiện kiểm tra sức khỏe mỗi 10 giây.
+      interval: 10s
+      # Thời gian chờ kiểm tra sức khỏe là 5 giây.
+      timeout: 5s
+      # Thử lại kiểm tra sức khỏe tối đa 10 lần.
+      retries: 10
+      # Thời gian chờ trước khi bắt đầu kiểm tra sức khỏe là 5 giây.
+      start_period: 5s
+    # Kết nối container vào mạng "microservices_network".
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
+  configserver:
+    # Sử dụng hình ảnh "configserver" phiên bản "s6".
+    image: "configserver:s6"
+    # Đặt tên container là "configserver-ms".
+    container_name: "configserver-ms"
+    # Mở cổng 8071 để truy cập dịch vụ Config Server.
+    ports:
+      - "8071:8071"
+    # Kiểm tra sức khỏe bằng cách gọi API health của Config Server.
+    healthcheck:
+      test: "curl -fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
+    extends:
+      file: common-config.yml
+      service: microservice-base-config
+
+  accounts:
+    # Sử dụng hình ảnh "accounts" phiên bản "s6".
+    image: "accounts:s6"
+    # Đặt tên container là "accounts-ms".
+    container_name: "accounts-ms"
+    # Mở cổng 9088 để truy cập dịch vụ Accounts.
+    ports:
+      - "9088:9088"
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+    # Cấu hình môi trường cho ứng dụng Spring.
+    environment:
+      SPRING_APPLICATION_NAME: "accounts"
+
+  loans:
+    # Sử dụng hình ảnh "loans" phiên bản "s6".
+    image: "loans:s6"
+    # Đặt tên container là "loans-ms".
+    container_name: "loans-ms"
+    # Mở cổng 9089 để truy cập dịch vụ Loans.
+    ports:
+      - "9089:9089"
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+    # Cấu hình môi trường cho ứng dụng Spring.
+    environment:
+      SPRING_APPLICATION_NAME: "loans"
+
+  cards:
+    # Sử dụng hình ảnh "cards" phiên bản "s6".
+    image: "cards:s6"
+    # Đặt tên container là "cards-ms".
+    container_name: "cards-ms"
+    # Mở cổng 9090 để truy cập dịch vụ Cards.
+    ports:
+      - "9090:9090"
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+    # Cấu hình môi trường cho ứng dụng Spring.
+    environment:
+      SPRING_APPLICATION_NAME: "cards"
+
+networks:
+  # Sử dụng driver mạng "bridge" để các container có thể giao tiếp với nhau.
+  microservices_network:
+    driver: bridge
