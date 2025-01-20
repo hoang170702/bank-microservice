@@ -13,15 +13,17 @@ services:
       resources:
         limits:
           memory: 700m
+    environment:
+      SPRING_RABBITMQ_HOST: "rabbit"
 
   # Kế thừa microservice-base-config và cấu hình môi trường cho ứng dụng Spring.
   microservice-configserver-config:
     extends:
       service: microservice-base-config
-    # Dịch vụ này phụ thuộc vào "configserver" và chỉ khởi động khi "configserver" hoàn thành thành công.
+    # Dịch vụ này phụ thuộc vào "configserver" và chỉ khởi động khi "configserver" check status Healthy.
     depends_on:
       configserver:
-        condition: service_completed_successfully
+        condition: service_healthy
     environment:
       SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
       SPRING_PROFILES_ACTIVE: dev
