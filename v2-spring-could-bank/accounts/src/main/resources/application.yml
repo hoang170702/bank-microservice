@@ -4,30 +4,19 @@ spring:
   profiles:
     active: "dev"
   datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://localhost:3306/accountsdb
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
     show-sql: true
-    properties:
-      hibernate:
-        boot:
-          allow_jdbc_metadata_access: false
+
   config:
     import: "optional:configserver:http://localhost:8071/"
-
-  #config rabbitmq
-  rabbitmq:
-    host: "localhost"
-    port: 5672
-    username: "guest"
-    password: "guest"
-
-
 
 server:
   port: 9088

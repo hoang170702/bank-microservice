@@ -1,89 +1,100 @@
 services:
-  rabbit:
-    image: rabbitmq:4.0-management
-    hostname: rabbitmq
-    # Mở cổng 5672 để RabbitMQ xử lý giao tiếp với các dịch vụ khác.
-    # Mở cổng 15672 để truy cập giao diện quản lý RabbitMQ.
+  accountsdb:
+    container_name: accountsdb
     ports:
-      - "5672:5672"
-      - "15672:15672"
-    # Kiểm tra sức khỏe container bằng lệnh chẩn đoán của RabbitMQ.
-    healthcheck:
-      test: rabbitmq-diagnostic check_port_connectivity
-      # Thực hiện kiểm tra sức khỏe mỗi 10 giây.
-      interval: 10s
-      # Thời gian chờ kiểm tra sức khỏe là 5 giây.
-      timeout: 5s
-      # Thử lại kiểm tra sức khỏe tối đa 10 lần.
-      retries: 10
-      # Thời gian chờ trước khi bắt đầu kiểm tra sức khỏe là 5 giây.
-      start_period: 5s
-    # Kết nối container vào mạng "microservices_network".
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: accountsdb
     extends:
       file: common-config.yml
-      service: network-deploy-service
+      service: microservice-db-config
+
+  loansdb:
+    container_name: loansdb
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_DATABASE: loansdb
+    extends:
+      file: common-config.yml
+      service: microservice-db-config
+
+  cardsdb:
+    container_name: cardsdb
+    ports:
+      - 3308:3306
+    environment:
+      MYSQL_DATABASE: cardsdb
+    extends:
+      file: common-config.yml
+      service: microservice-db-config
 
   configserver:
-    # Sử dụng hình ảnh "configserver" phiên bản "s6".
-    image: "configserver:s6"
-    # Đặt tên container là "configserver-ms".
-    container_name: "configserver-ms"
-    # Mở cổng 8071 để truy cập dịch vụ Config Server.
+    image: "configserver:s7"
+    container_name: configserver-ms
     ports:
       - "8071:8071"
-    # Kiểm tra sức khỏe bằng cách gọi API health của Config Server.
     healthcheck:
-      test: "curl -fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
+      test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     extends:
       file: common-config.yml
       service: microservice-base-config
 
   accounts:
-    # Sử dụng hình ảnh "accounts" phiên bản "s6".
-    image: "accounts:s6"
-    # Đặt tên container là "accounts-ms".
-    container_name: "accounts-ms"
-    # Mở cổng 9088 để truy cập dịch vụ Accounts.
+    image: "accounts:s7"
+    container_name: accounts-ms
     ports:
-      - "9088:9088"
-    extends:
-      file: common-config.yml
-      service: microservice-configserver-config
-    # Cấu hình môi trường cho ứng dụng Spring.
+      - "8080:8080"
     environment:
       SPRING_APPLICATION_NAME: "accounts"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://accountsdb:3306/accountsdb"
+    depends_on:
+      accountsdb:
+        condition: service_healthy
+      configserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
 
   loans:
-    # Sử dụng hình ảnh "loans" phiên bản "s6".
-    image: "loans:s6"
-    # Đặt tên container là "loans-ms".
-    container_name: "loans-ms"
-    # Mở cổng 9089 để truy cập dịch vụ Loans.
+    image: "loans:s7"
+    container_name: loans-ms
     ports:
-      - "9089:9089"
-    extends:
-      file: common-config.yml
-      service: microservice-configserver-config
-    # Cấu hình môi trường cho ứng dụng Spring.
+      - "8090:8090"
     environment:
       SPRING_APPLICATION_NAME: "loans"
-
-  cards:
-    # Sử dụng hình ảnh "cards" phiên bản "s6".
-    image: "cards:s6"
-    # Đặt tên container là "cards-ms".
-    container_name: "cards-ms"
-    # Mở cổng 9090 để truy cập dịch vụ Cards.
-    ports:
-      - "9090:9090"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://loansdb:3306/loansdb"
+    depends_on:
+      loansdb:
+        condition: service_healthy
+      configserver:
+        condition: service_healthy
     extends:
       file: common-config.yml
       service: microservice-configserver-config
-    # Cấu hình môi trường cho ứng dụng Spring.
+
+  cards:
+    image: "cards:s7"
+    container_name: cards-ms
+    ports:
+      - "9000:9000"
     environment:
       SPRING_APPLICATION_NAME: "cards"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://cardsdb:3306/cardsdb"
+    depends_on:
+      cardsdb:
+        condition: service_healthy
+      configserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
 
 networks:
-  # Sử dụng driver mạng "bridge" để các container có thể giao tiếp với nhau.
   microservices_network:
-    driver: bridge
+    driver: "bridge"

@@ -79,7 +79,7 @@
                 <configuration>
                     <to>
                         <image>
-                            ${project.artifactId}:s6
+                            ${project.artifactId}:s7
                         </image>
                     </to>
                 </configuration>
