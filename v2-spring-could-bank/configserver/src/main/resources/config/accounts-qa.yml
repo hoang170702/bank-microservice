@@ -1,0 +1,11 @@
+build:
+  version: "2.0"
+
+accounts:
+  message: "Welcome to my bank QA Account"
+  contactDetails:
+    email: "qa@example.com"
+    name: "QA - LEAD"
+  onCallSupport:
+    - (666) 666-1234
+    - (666) 666-1345

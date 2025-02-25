@@ -1,0 +1,10 @@
+build:
+  version: "1.0"
+loans:
+  message: "Welcome to my bank Loans prod"
+  contactDetails:
+    email: "huyhoang11202@gmail.com"
+    name: "NGUYEN HUY HOANG - PRODUCT Owner"
+  onCallSupport:
+    - (999) 999-1234
+    - (999) 999-1345
