@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/loans")
+@RequestMapping("/api")
 public class LoansController {
     private final ILoansService iLoansService;
 

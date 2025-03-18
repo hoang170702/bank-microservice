@@ -7,8 +7,8 @@ spring:
     gateway:
       discovery:
         locator:
-          enabled: false
-          lower-case-service-id: true
+          enabled: true
+          lowerCaseServiceId: true
 
 logging:
   level:
@@ -21,21 +21,15 @@ management:
     web:
       exposure:
         include: "*"
-  endpoint:
-    gateway:
-      enabled: true
   info:
     env:
       enabled: true
+  endpoint:
+    gateway:
+      access: unrestricted
 
 info:
   app:
     name: "gatewayserver"
     description: "managing bank gatewayserver."
     version: "1.0.0"
-
-springdoc:
-  api-docs:
-    path: /v3/api-docs
-  swagger-ui:
-    path: /swagger-ui.html

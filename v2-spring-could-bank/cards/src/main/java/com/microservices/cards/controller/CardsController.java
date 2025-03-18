@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/card")
+@RequestMapping("/api")
 public class CardsController {
     private final ICardsService iCardsService;
 
