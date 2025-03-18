@@ -5,6 +5,8 @@ import com.microservices.cards.dto.CardsContactInfoDto;
 import com.microservices.cards.dto.CardsDto;
 import com.microservices.cards.dto.payload.ResponseDto;
 import com.microservices.cards.service.ICardsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 public class CardsController {
+    private static final Logger logger = LoggerFactory.getLogger(CardsController.class);
+
     private final ICardsService iCardsService;
 
     @Value("${build.version}")
@@ -38,7 +42,8 @@ public class CardsController {
     }
 
     @GetMapping("/fetch-card")
-    public ResponseEntity<CardsDto> fetchCard(@RequestParam String mobilePhone) {
+    public ResponseEntity<CardsDto> fetchCard(@RequestHeader("microbank-correlation-id") String correlationId, @RequestParam String mobilePhone) {
+        logger.debug("microbank-correlation-id found {}", correlationId);
         return ResponseEntity.status(HttpStatus.OK).body(iCardsService.fetchCard(mobilePhone));
     }
 

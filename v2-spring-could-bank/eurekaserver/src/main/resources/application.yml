@@ -19,3 +19,8 @@ management:
     health:
       probes:
         enabled: true
+logging:
+  level:
+    com:
+      bank:
+        eurekaserver: debug

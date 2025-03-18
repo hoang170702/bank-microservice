@@ -12,8 +12,9 @@ spring:
 
 logging:
   level:
-    root: INFO
-    org.springframework.web: DEBUG
+    com:
+      bank:
+        gatewayserver: debug
 
 #accept all api actuators
 management:
@@ -33,3 +34,4 @@ info:
     name: "gatewayserver"
     description: "managing bank gatewayserver."
     version: "1.0.0"
+

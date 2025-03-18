@@ -14,6 +14,7 @@ import com.microservices.accounts.service.client.LoanFeignClient;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.Collections;
 
@@ -36,13 +37,13 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public CustomerDetailsDto customerDetailsDto(String phoneNumber) {
+    public CustomerDetailsDto customerDetailsDto(String correlationId, String phoneNumber) {
         ModelMapper modelMapper = new ModelMapper();
         try {
             Customer customer = customerRepository.findByPhoneNumber(phoneNumber).orElseThrow(() -> new ResourceNotFoundException("customer", "phone number", phoneNumber));
             Accounts accounts = accountsRepository.findByCustomer_Id(customer.getId()).orElseThrow(() -> new ResourceNotFoundException("account", "customer", customer.getId().toString()));
-            ResponseEntity<CardsDto> cardsDtoResponseEntity = cardFeignClient.fetchCard(phoneNumber);
-            ResponseEntity<LoansDto> loansDtoResponseEntity = loanFeignClient.fetchLoan(phoneNumber);
+            ResponseEntity<CardsDto> cardsDtoResponseEntity = cardFeignClient.fetchCard(correlationId,phoneNumber);
+            ResponseEntity<LoansDto> loansDtoResponseEntity = loanFeignClient.fetchLoan(correlationId,phoneNumber);
 
             CustomerDetailsDto customerDetailsDto = modelMapper.map(customer, CustomerDetailsDto.class);
             customerDetailsDto.setAccountsDto(modelMapper.map(accounts, AccountsDto.class));

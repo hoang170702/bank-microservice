@@ -65,4 +65,10 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 
+#logging:
+#  level:
+#    com:
+#      bank:
+#        gatewayserver: debug
+
 

@@ -5,6 +5,8 @@ import com.microservices.loans.dto.LoansContactInfoDto;
 import com.microservices.loans.dto.LoansDto;
 import com.microservices.loans.dto.payload.ResponseDto;
 import com.microservices.loans.service.ILoansService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class LoansController {
     private final ILoansService iLoansService;
+    private static final Logger logger = LoggerFactory.getLogger(LoansController.class);
 
     @Value("${build.version}")
     private String buildVersion;
@@ -37,7 +40,8 @@ public class LoansController {
     }
 
     @GetMapping("/fetch-loan")
-    public ResponseEntity<LoansDto> fetchLoan(@RequestParam String mobileNumber) {
+    public ResponseEntity<LoansDto> fetchLoan(@RequestHeader("microbank-correlation-id") String correlationId, @RequestParam String mobileNumber) {
+        logger.debug("microbank-correlation-id found {}", correlationId);
         return ResponseEntity.status(HttpStatus.OK).body(iLoansService.fetchLoan(mobileNumber));
     }
 
