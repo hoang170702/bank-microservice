@@ -36,10 +36,7 @@ public class GatewayserverApplication {
                                 "/micro-bank/card/(?<segment>.*)",
                                 "/${segment}"
                         )
-                        .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
-                        .circuitBreaker(config -> config.setName("cardsCircuitBreaker")
-                                .setFallbackUri("forward:/contact-support")
-                        ))
+                        .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
                         .uri("lb://CARDS")
                 )
                 .route(p -> p
@@ -48,10 +45,7 @@ public class GatewayserverApplication {
                                 "/micro-bank/loans/(?<segment>.*)",
                                 "/${segment}"
                         )
-                        .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
-                        .circuitBreaker(config -> config.setName("loansCircuitBreaker")
-                                .setFallbackUri("forward:/contact-support")
-                        ))
+                        .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
                         .uri("lb://LOANS")
                 )
                 .build();

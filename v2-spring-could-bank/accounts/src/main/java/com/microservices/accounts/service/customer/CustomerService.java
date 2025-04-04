@@ -12,6 +12,7 @@ import com.microservices.accounts.repository.CustomerRepository;
 import com.microservices.accounts.service.client.CardFeignClient;
 import com.microservices.accounts.service.client.LoanFeignClient;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -27,6 +28,7 @@ public class CustomerService implements ICustomerService {
     private final LoanFeignClient loanFeignClient;
 
 
+    @Autowired
     public CustomerService(AccountsRepository accountsRepository, CustomerRepository customerRepository,
                            CardFeignClient cardFeignClient, LoanFeignClient loanFeignClient
     ) {
@@ -42,19 +44,26 @@ public class CustomerService implements ICustomerService {
         try {
             Customer customer = customerRepository.findByPhoneNumber(phoneNumber).orElseThrow(() -> new ResourceNotFoundException("customer", "phone number", phoneNumber));
             Accounts accounts = accountsRepository.findByCustomer_Id(customer.getId()).orElseThrow(() -> new ResourceNotFoundException("account", "customer", customer.getId().toString()));
-            ResponseEntity<CardsDto> cardsDtoResponseEntity = cardFeignClient.fetchCard(correlationId,phoneNumber);
-            ResponseEntity<LoansDto> loansDtoResponseEntity = loanFeignClient.fetchLoan(correlationId,phoneNumber);
 
             CustomerDetailsDto customerDetailsDto = modelMapper.map(customer, CustomerDetailsDto.class);
             customerDetailsDto.setAccountsDto(modelMapper.map(accounts, AccountsDto.class));
-            customerDetailsDto.setLoansDto(modelMapper.map(loansDtoResponseEntity.getBody(), LoansDto.class));
-            customerDetailsDto.setCardsDto(modelMapper.map(cardsDtoResponseEntity.getBody(), CardsDto.class));
+
+            ResponseEntity<CardsDto> cardsDtoResponseEntity = cardFeignClient.fetchCard(correlationId,phoneNumber);
+            if (cardsDtoResponseEntity != null && cardsDtoResponseEntity.getBody() != null) {
+                customerDetailsDto.setCardsDto(modelMapper.map(cardsDtoResponseEntity.getBody(), CardsDto.class));
+            }
+
+
+            ResponseEntity<LoansDto> loansDtoResponseEntity = loanFeignClient.fetchLoan(correlationId,phoneNumber);
+            if (null != loansDtoResponseEntity){
+                customerDetailsDto.setLoansDto(modelMapper.map(loansDtoResponseEntity.getBody(), LoansDto.class));
+            }
 
             return customerDetailsDto;
         } catch (Exception e) {
             // Handle exceptions here
             e.printStackTrace();
         }
-        return (CustomerDetailsDto) Collections.EMPTY_LIST;
+        return new CustomerDetailsDto();
     }
 }
