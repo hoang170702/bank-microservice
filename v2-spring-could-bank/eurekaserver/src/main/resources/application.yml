@@ -11,9 +11,9 @@ management:
         include: "*"
   #config to enable liveness and readiness
   health:
-    readinessstate:
+    readiness-state:
       enabled: true
-    livenessstate:
+    liveness-state:
       enabled: true
   endpoint:
     health:

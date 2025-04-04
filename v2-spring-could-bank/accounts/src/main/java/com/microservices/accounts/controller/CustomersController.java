@@ -26,7 +26,7 @@ public class CustomersController {
             @RequestHeader("microbank-correlation-id") String correlationId,
             @RequestParam("phoneNumber") String phoneNumber) {
         try {
-            logger.debug("microbank-correlation-id found {}", correlationId);
+            logger.info("microbank-correlation-id found {}", correlationId);
             CustomerDetailsDto customerDetailsDto = iCustomerService.customerDetailsDto(correlationId, phoneNumber);
             return ResponseEntity.status(HttpStatus.OK).body(customerDetailsDto);
         } catch (Exception e) {

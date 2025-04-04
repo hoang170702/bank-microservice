@@ -9,6 +9,8 @@ spring:
         locator:
           enabled: true
           lowerCaseServiceId: true
+    config:
+      enabled: true
 
 logging:
   level:
@@ -22,6 +24,11 @@ management:
     web:
       exposure:
         include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
   info:
     env:
       enabled: true
@@ -35,3 +42,10 @@ info:
     description: "managing bank gatewayserver."
     version: "1.0.0"
 
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10
+      permittedNumberOfCallsInHalfOpenState: 2
+      failureRateThreshold: 50
+      waitDurationInOpenState: 10000

@@ -21,9 +21,13 @@ public class GatewayserverApplication {
                 .route(p -> p
                         .path("/micro-bank/accounts/**")
                         .filters(f -> f.rewritePath(
-                                "/micro-bank/accounts/(?<segment>.*)",
-                                "/${segment}"
-                        ).addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+                                        "/micro-bank/accounts/(?<segment>.*)",
+                                        "/${segment}")
+                                .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
+                                .circuitBreaker(config -> config.setName("accountsCircuitBreaker")
+                                        .setFallbackUri("forward:/contact-support")
+                                )
+                        )
                         .uri("lb://ACCOUNTS")
                 )
                 .route(p -> p
@@ -31,7 +35,11 @@ public class GatewayserverApplication {
                         .filters(f -> f.rewritePath(
                                 "/micro-bank/card/(?<segment>.*)",
                                 "/${segment}"
-                        ).addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+                        )
+                        .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
+                        .circuitBreaker(config -> config.setName("cardsCircuitBreaker")
+                                .setFallbackUri("forward:/contact-support")
+                        ))
                         .uri("lb://CARDS")
                 )
                 .route(p -> p
@@ -39,7 +47,11 @@ public class GatewayserverApplication {
                         .filters(f -> f.rewritePath(
                                 "/micro-bank/loans/(?<segment>.*)",
                                 "/${segment}"
-                        ).addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+                        )
+                        .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
+                        .circuitBreaker(config -> config.setName("loansCircuitBreaker")
+                                .setFallbackUri("forward:/contact-support")
+                        ))
                         .uri("lb://LOANS")
                 )
                 .build();
