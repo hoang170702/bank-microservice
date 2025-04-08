@@ -60,5 +60,6 @@ server:
 
 logging:
   level:
-    root: INFO
-    org.springframework.web: DEBUG
+    com:
+      microservices:
+        loans: debug
