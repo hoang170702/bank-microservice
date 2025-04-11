@@ -14,6 +14,12 @@ spring:
         response-timeout: 2s
     config:
       enabled: true
+  data:
+    redis:
+      connect-timeout: 2s
+      host: localhost
+      port: 9000
+      timeout: 1s
 
 logging:
   level:
@@ -52,3 +58,4 @@ resilience4j.circuitbreaker:
       permittedNumberOfCallsInHalfOpenState: 2
       failureRateThreshold: 50
       waitDurationInOpenState: 10000
+
