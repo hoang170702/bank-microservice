@@ -112,6 +112,12 @@
                 spring-cloud-starter-circuitbreaker-reactor-resilience4j
             </artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>1.15.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -123,7 +129,7 @@
                 <configuration>
                     <to>
                         <image>
-                            ${project.artifactId}:s9
+                            ${project.artifactId}:s11
                         </image>
                     </to>
                 </configuration>

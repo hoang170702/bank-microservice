@@ -93,6 +93,13 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
             <version>4.2.0</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>1.15.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -104,7 +111,7 @@
                 <configuration>
                     <to>
                         <image>
-                            ${project.artifactId}:s9
+                            ${project.artifactId}:s10
                         </image>
                     </to>
                 </configuration>
