@@ -45,6 +45,12 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>1.15.0</version>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -71,7 +77,7 @@
                 <configuration>
                     <to>
                         <image>
-                            ${project.artifactId}:s10
+                            ${project.artifactId}:s11
                         </image>
                     </to>
                 </configuration>

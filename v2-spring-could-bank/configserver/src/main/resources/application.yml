@@ -29,6 +29,9 @@ management:
     health:
       probes:
         enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
 # ------------ config by file local and server ------------
 #    active: native
 #  cloud:
