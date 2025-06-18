@@ -43,7 +43,7 @@ public class CardsController {
 
     @GetMapping("/fetch-card")
     public ResponseEntity<CardsDto> fetchCard(@RequestHeader("microbank-correlation-id") String correlationId, @RequestParam String mobilePhone) {
-        logger.debug("microbank-correlation-id found {}", correlationId);
+        logger.debug("microbank-correlation-id found");
         return ResponseEntity.status(HttpStatus.OK).body(iCardsService.fetchCard(mobilePhone));
     }
 

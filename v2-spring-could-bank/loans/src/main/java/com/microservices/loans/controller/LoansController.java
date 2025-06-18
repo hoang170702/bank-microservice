@@ -41,7 +41,7 @@ public class LoansController {
 
     @GetMapping("/fetch-loan")
     public ResponseEntity<LoansDto> fetchLoan(@RequestHeader("microbank-correlation-id") String correlationId, @RequestParam String mobileNumber) {
-        logger.debug("microbank-correlation-id found {}", correlationId);
+        logger.debug("microbank-correlation-id found");
         return ResponseEntity.status(HttpStatus.OK).body(iLoansService.fetchLoan(mobileNumber));
     }
 
