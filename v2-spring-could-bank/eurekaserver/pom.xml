@@ -88,7 +88,7 @@
                 <configuration>
                     <to>
                         <image>
-                            ${project.artifactId}:s11
+                            ${project.artifactId}:s12
                         </image>
                     </to>
                 </configuration>
