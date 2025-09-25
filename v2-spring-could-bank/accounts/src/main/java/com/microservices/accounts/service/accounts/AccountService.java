@@ -115,6 +115,20 @@ public class AccountService implements IAccountService {
         return isDelete;
     }
 
+    @Override
+    public boolean updateCommunicationSw(Long accountNumber) {
+        boolean isUpdated = false;
+        if(accountNumber !=null ){
+            Accounts accounts = accountsRepository.findById(accountNumber).orElseThrow(
+                    () -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber.toString())
+            );
+            accounts.setCommunicationSw(true);
+            accountsRepository.save(accounts);
+            isUpdated = true;
+        }
+        return  isUpdated;
+    }
+
 
     private Accounts createNewAccount(Customer customer) {
         Accounts newAccount = new Accounts();

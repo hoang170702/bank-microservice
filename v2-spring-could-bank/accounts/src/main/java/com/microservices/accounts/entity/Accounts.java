@@ -38,4 +38,7 @@ public class Accounts {
 
     @Column(name = "UPDATED_BY")
     private String updatedBy;
+
+    @Column(name = "COMMUNICATION_SW")
+    private Boolean communicationSw;
 }

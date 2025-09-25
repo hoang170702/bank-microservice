@@ -9,4 +9,6 @@ public interface IAccountService {
     Optional<CustomerDto> fetchAccount(String phoneNumber);
     boolean updateAccount(CustomerDto customerDto);
     boolean deleteAccount(String phoneNumber);
+    boolean updateCommunicationSw(Long accountNumber);
+
 }
