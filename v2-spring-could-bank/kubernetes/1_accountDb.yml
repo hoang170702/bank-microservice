@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: accountsdb
+  labels:
+    app: accountsdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: accountsdb
+  template:
+    metadata:
+      labels:
+        app: accountsdb
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          env:
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: ACCOUNT_DATABASE
+            - name: SPRING_ACCOUNT_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: SPRING_ACCOUNT_DATASOURCE_URL
+            - name: MYSQL_ROOT_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: USER_DB
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: PASS_DB
+          ports:
+            - name: http
+              containerPort: 3306
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: accountsdb
+  labels:
+    app: accountsdb
+spec:
+  selector:
+    app: accountsdb
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 3306
+      targetPort: 3306

@@ -19,16 +19,16 @@ spec:
           image: quay.io/keycloak/keycloak:26.4.0
           args: [ "start-dev" ]
           env:
-          - name: KC_BOOTSTRAP_ADMIN_USERNAME
-            valueFrom:
-              configMapKeyRef:
-                name: configmap
-                key: KC_BOOTSTRAP_ADMIN_USERNAME
-          - name: KC_BOOTSTRAP_ADMIN_PASSWORD
-            valueFrom:
-              configMapKeyRef:
-                name: configmap
-                key: KC_BOOTSTRAP_ADMIN_PASSWORD
+            - name: KC_BOOTSTRAP_ADMIN_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: KC_BOOTSTRAP_ADMIN_USERNAME
+            - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: KC_BOOTSTRAP_ADMIN_PASSWORD
           ports:
             - name: http
               containerPort: 8080
