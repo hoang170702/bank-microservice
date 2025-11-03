@@ -16,19 +16,19 @@ spec:
     spec:
       containers:
         - name: eurekaserver
-          image: huyhoang11202/eurekaserver:s12
+          image: eazybytes/eurekaserver:s12
           ports:
             - containerPort: 8070
           env:
             - name: SPRING_APPLICATION_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: configmap
+                  name: eazybank-configmap
                   key: EUREKA_APPLICATION_NAME
             - name: SPRING_CONFIG_IMPORT
               valueFrom:
                 configMapKeyRef:
-                  name: configmap
+                  name: eazybank-configmap
                   key: SPRING_CONFIG_IMPORT
 ---
 apiVersion: v1

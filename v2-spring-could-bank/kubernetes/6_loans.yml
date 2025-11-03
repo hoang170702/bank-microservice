@@ -16,29 +16,29 @@ spec:
     spec:
       containers:
         - name: loans
-          image: huyhoang11202/loans:s12
+          image: eazybytes/loans:s12
           ports:
-            - containerPort: 9090
+            - containerPort: 8090
           env:
             - name: SPRING_APPLICATION_NAME
               valueFrom:
                 configMapKeyRef:
-                  name: configmap
+                  name: eazybank-configmap
                   key: LOANS_APPLICATION_NAME
             - name: SPRING_PROFILES_ACTIVE
               valueFrom:
                 configMapKeyRef:
-                  name: configmap
+                  name: eazybank-configmap
                   key: SPRING_PROFILES_ACTIVE
             - name: SPRING_CONFIG_IMPORT
               valueFrom:
                 configMapKeyRef:
-                  name: configmap
+                  name: eazybank-configmap
                   key: SPRING_CONFIG_IMPORT
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
               valueFrom:
                 configMapKeyRef:
-                  name: configmap
+                  name: eazybank-configmap
                   key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
 ---
 apiVersion: v1
@@ -51,5 +51,5 @@ spec:
   type: LoadBalancer
   ports:
     - protocol: TCP
-      port: 9090
-      targetPort: 9090
+      port: 8090
+      targetPort: 8090
