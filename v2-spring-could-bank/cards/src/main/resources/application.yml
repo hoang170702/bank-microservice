@@ -4,13 +4,16 @@ spring:
   profiles:
     active: "dev"
   datasource:
-    url: jdbc:mysql://localhost:3308/cardsdb
-    username: root
-    password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:h2:mem:cardsdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true
 
   jpa:
-    database-platform: org.hibernate.dialect.MySQLDialect
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
     show-sql: true
@@ -21,8 +24,12 @@ spring:
 
   config:
     import: "optional:configserver:http://localhost:8071/"
+  cloud:
+    kubernetes:
+      discovery:
+        all-namespaces: true
 server:
-  port: 9089
+  port: 9000
 
 #get all api of ACTUATOR
 management:
@@ -49,14 +56,14 @@ endpoint:
   shutdown:
     enabled: true
 
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    fetchRegistry: true
-    registerWithEureka: true
-    serviceUrl:
-      defaultZone: http://localhost:8070/eureka/
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#  client:
+#    fetchRegistry: true
+#    registerWithEureka: true
+#    serviceUrl:
+#      defaultZone: http://localhost:8070/eureka/
 
 info:
   app:

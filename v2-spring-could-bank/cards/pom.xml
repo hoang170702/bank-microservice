@@ -90,16 +90,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.mysql</groupId>
-            <artifactId>mysql-connector-j</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-eureka-client -->
+
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-            <version>4.2.0</version>
+            <artifactId>spring-cloud-starter-kubernetes-discoveryclient</artifactId>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus -->
@@ -137,7 +131,7 @@
                 <configuration>
                     <to>
                         <image>
-                            ${project.artifactId}:s14
+                            huyhoang11202/${project.artifactId}:s17
                         </image>
                     </to>
                 </configuration>
